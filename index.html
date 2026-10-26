@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Educação em números | Santo André 2025</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--navy:#16324f;--blue:#2364aa;--teal:#168b85;--gold:#f2b84b;--bg:#f4f7fb;--ink:#203047;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial}
+header{background:linear-gradient(120deg,#12263f,#205c82);color:white;padding:36px max(22px,calc((100% - 1180px)/2)) 30px}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.75rem;color:#bfe8ed;font-weight:700}
+h1{font-size:clamp(2rem,4vw,3.2rem);line-height:1.08;margin:10px 0}header p{max-width:780px;color:#e0edf5;margin:12px 0}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.pill{border:1px solid #ffffff55;border-radius:99px;padding:6px 12px;font-size:.85rem}
+nav{position:sticky;top:0;z-index:5;background:white;border-bottom:1px solid #e2e8f0;padding:10px max(16px,calc((100% - 1180px)/2));display:flex;gap:8px;overflow:auto}
+nav a{white-space:nowrap;text-decoration:none;color:var(--navy);font-weight:650;font-size:.9rem;padding:8px 12px;border-radius:8px}nav a:hover{background:#e8f2fb}
+main{max-width:1180px;margin:26px auto;padding:0 18px 50px}.section{margin:32px 0;scroll-margin-top:80px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;flex-wrap:wrap;margin-bottom:15px}
+h2{margin:0;color:var(--navy);font-size:1.55rem}.sub{color:var(--muted);margin:5px 0 0}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.kpi,.panel{background:white;border:1px solid #e5eaf1;border-radius:16px;padding:20px;box-shadow:0 3px 12px #18315308}
+.kpi .label{color:var(--muted);font-size:.9rem}.kpi strong{display:block;font-size:clamp(1.45rem,2.6vw,2.2rem);letter-spacing:-.04em;color:var(--navy);margin:5px 0}.kpi small{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.panel h3{margin:0 0 5px;font-size:1.05rem;color:var(--navy)}.panel p{margin:0 0 14px;color:var(--muted);font-size:.9rem}.chart-wrap{height:310px;position:relative}
+.table-wrap{overflow:auto;border:1px solid #e5eaf1;border-radius:14px;background:white}table{border-collapse:collapse;width:100%;min-width:620px}th,td{text-align:left;padding:12px 15px;border-bottom:1px solid #edf1f6}th{background:#edf4fa;color:#25445f;font-size:.84rem}td.num{text-align:right;font-variant-numeric:tabular-nums}tr:last-child td{border-bottom:0}
+.note{border-left:4px solid var(--gold);padding:12px 15px;background:#fff8e8;border-radius:0 10px 10px 0;color:#614b20;margin-top:14px;font-size:.9rem}
+footer{background:#12263f;color:#d9e7f2;padding:24px max(22px,calc((100% - 1180px)/2));font-size:.9rem}footer a{color:#bfe8ed}
+.search{width:100%;max-width:340px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font:inherit}
+@media(max-width:800px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}.chart-wrap{height:280px}}
+@media(max-width:430px){.cards{grid-template-columns:1fr 1fr;gap:9px}.kpi{padding:14px}.kpi strong{font-size:1.5rem}main{padding:0 12px 35px}}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">Painel municipal • Censo Escolar 2025</div>
+<h1>Educação em números<br>Santo André</h1>
+<p>Uma visão interativa dos principais indicadores da Educação Básica no município, com recortes por rede, etapa de ensino, tempo de permanência, perfil das matrículas e estrutura escolar.</p>
+<div class="meta"><span class="pill">Código IBGE: 3547809</span><span class="pill">Data-base informada: 28/05/2025</span><span class="pill">Fonte: INEP</span></div>
+</header>
+<nav><a href="#resumo">Visão geral</a><a href="#redes">Redes de ensino</a><a href="#etapas">Etapas</a><a href="#integral">Tempo integral</a><a href="#perfil">Perfil</a><a href="#inclusao">Educação especial</a><a href="#estrutura">Estrutura</a></nav>
+<main>
+<section class="section" id="resumo">
+<div class="section-head"><div><h2>Visão geral</h2><p class="sub">Os números essenciais da educação municipal.</p></div></div>
+<div class="cards">
+<div class="kpi"><span class="label">Matrículas</span><strong>142.673</strong><small>Educação Básica</small></div>
+<div class="kpi"><span class="label">Estabelecimentos</span><strong>424</strong><small>193 públicos · 231 privados</small></div>
+<div class="kpi"><span class="label">Docentes</span><strong>7.388</strong><small>Registros municipais</small></div>
+<div class="kpi"><span class="label">Turmas</span><strong>6.904</strong><small>3.788 públicas · 3.116 privadas</small></div>
+</div>
+<div class="grid2" style="margin-top:16px">
+<div class="panel"><h3>Matrículas por dependência administrativa</h3><p>Participação no total municipal</p><div class="chart-wrap"><canvas id="redeChart"></canvas></div></div>
+<div class="panel"><h3>Tempo integral e parcial</h3><p>Distribuição de todas as matrículas</p><div class="chart-wrap"><canvas id="tempoChart"></canvas></div></div>
+</div>
+</section>
+<section class="section" id="redes">
+<div class="section-head"><div><h2>Redes de ensino</h2><p class="sub">Comparação de matrículas, estabelecimentos e turmas.</p></div></div>
+<div class="panel"><div class="chart-wrap"><canvas id="comparativoChart"></canvas></div></div>
+<div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>Indicador</th><th class="num">Total</th><th class="num">Rede pública</th><th class="num">Estadual</th><th class="num">Municipal</th><th class="num">Privada</th></tr></thead><tbody>
+<tr><td>Matrículas</td><td class="num">142.673</td><td class="num">88.706</td><td class="num">47.314</td><td class="num">41.392</td><td class="num">53.967</td></tr>
+<tr><td>Estabelecimentos</td><td class="num">424</td><td class="num">193</td><td class="num">73</td><td class="num">120</td><td class="num">231</td></tr>
+<tr><td>Turmas</td><td class="num">6.904</td><td class="num">3.788</td><td class="num">1.561</td><td class="num">2.227</td><td class="num">3.116</td></tr>
+</tbody></table></div>
+<div class="note">A contagem de docentes por rede pode se sobrepor: um mesmo profissional pode atuar em mais de uma rede ou estabelecimento. Não some as parcelas para recalcular o total.</div>
+</section>
+<section class="section" id="etapas">
+<div class="section-head"><div><h2>Matrículas por etapa e modalidade</h2><p class="sub">Totais informados na síntese municipal.</p></div></div>
+<div class="panel"><div class="chart-wrap" style="height:360px"><canvas id="etapasChart"></canvas></div></div>
+<div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>Etapa/modalidade</th><th class="num">Total de matrículas</th></tr></thead><tbody>
+<tr><td>Educação Infantil</td><td class="num">30.781</td></tr><tr><td>Creche</td><td class="num">15.715</td></tr><tr><td>Pré-escola</td><td class="num">15.066</td></tr><tr><td>Ensino Fundamental regular</td><td class="num">77.979</td></tr><tr><td>Ensino Médio regular</td><td class="num">25.624</td></tr><tr><td>Educação Profissional</td><td class="num">11.507</td></tr><tr><td>EJA — total</td><td class="num">2.034</td></tr><tr><td>Educação Especial</td><td class="num">5.953</td></tr>
+</tbody></table></div>
+<div class="note">Etapas e modalidades podem se sobrepor. Creche e pré-escola fazem parte da Educação Infantil; modalidades não devem ser somadas indiscriminadamente.</div>
+</section>
+<section class="section" id="integral">
+<div class="section-head"><div><h2>Tempo integral</h2><p class="sub">Distribuição das matrículas por rede e jornada.</p></div></div>
+<div class="grid2"><div class="panel"><h3>Matrículas em tempo integral</h3><p>Quantidade por rede</p><div class="chart-wrap"><canvas id="integralChart"></canvas></div></div>
+<div class="panel"><h3>Percentual de tempo integral</h3><p>Proporção dentro de cada rede</p><div class="chart-wrap"><canvas id="percentChart"></canvas></div></div></div>
+</section>
+<section class="section" id="perfil">
+<div class="section-head"><div><h2>Perfil das matrículas</h2><p class="sub">Faixa etária, sexo e cor/raça conforme registros do documento.</p></div></div>
+<div class="grid2"><div class="panel"><h3>Faixa etária</h3><p>Número de matrículas</p><div class="chart-wrap" style="height:360px"><canvas id="idadeChart"></canvas></div></div>
+<div class="panel"><h3>Cor/raça registrada</h3><p>Número de matrículas</p><div class="chart-wrap" style="height:360px"><canvas id="racaChart"></canvas></div></div></div>
+<div class="cards" style="margin-top:16px">
+<div class="kpi"><span class="label">Sexo feminino</span><strong>70.499</strong><small>49,4% das matrículas</small></div>
+<div class="kpi"><span class="label">Sexo masculino</span><strong>72.174</strong><small>50,6% das matrículas</small></div>
+<div class="kpi"><span class="label">Cor/raça branca</span><strong>89.290</strong><small>62,6% do total</small></div>
+<div class="kpi"><span class="label">Não declarada</span><strong>19.868</strong><small>13,9% do total</small></div>
+</div>
+</section>
+<section class="section" id="inclusao">
+<div class="section-head"><div><h2>Educação Especial</h2><p class="sub">Matrículas em classes comuns e classes exclusivas.</p></div></div>
+<div class="grid2"><div class="panel"><h3>Tipo de classe</h3><p>Total de 5.953 matrículas</p><div class="chart-wrap"><canvas id="especialChart"></canvas></div></div>
+<div class="panel"><h3>Registros em classes comuns</h3><p>Tipos registrados no documento (podem coexistir no mesmo aluno).</p><div class="chart-wrap"><canvas id="tiposChart"></canvas></div></div></div>
+<div class="note">O documento informa que um mesmo aluno pode ter mais de uma matrícula e mais de um tipo de deficiência, TEA, altas habilidades ou superdotação. As categorias não são mutuamente exclusivas.</div>
+</section>
+<section class="section" id="estrutura">
+<div class="section-head"><div><h2>Estrutura escolar</h2><p class="sub">Estabelecimentos e turmas por etapa/modalidade.</p></div></div>
+<div class="grid2"><div class="panel"><h3>Estabelecimentos</h3><p>Unidades por etapa/modalidade — não aditivo.</p><div class="chart-wrap" style="height:360px"><canvas id="estabChart"></canvas></div></div>
+<div class="panel"><h3>Turmas</h3><p>Turmas por etapa/modalidade — não aditivo.</p><div class="chart-wrap" style="height:360px"><canvas id="turmasChart"></canvas></div></div></div>
+<div class="note">Um mesmo estabelecimento pode ofertar mais de uma etapa ou modalidade. Os quantitativos por etapa/modalidade não devem ser somados como se fossem unidades distintas.</div>
+</section>
+</main>
+<footer><strong>Fonte:</strong> INEP, Sinopse Estatística da Educação Básica 2025. Síntese municipal apresentada no documento “Caracterização da Educação de Santo André”.<br>Este painel é uma visualização dos dados informados na fonte e não substitui a publicação oficial.</footer>
+<script>
+const fmt=n=>n.toLocaleString('pt-BR');
+Chart.defaults.font.family='system-ui,-apple-system,Segoe UI,Roboto,Arial';Chart.defaults.color='#64748b';
+const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:9,padding:16}},tooltip:{callbacks:{label:c=>`${c.dataset.label||c.label}: ${fmt(c.raw)}`}}}};
+const colors=['#2364aa','#168b85','#f2b84b','#8a70b5','#e17c56','#5c91bd','#77b7a8','#9ca3af'];
+function chart(id,type,labels,datasets,extra={}){new Chart(document.getElementById(id),{type,data:{labels,datasets},options:{...base,...extra}})}
+chart('redeChart','doughnut',['Rede estadual','Rede municipal','Rede privada'],[{data:[47314,41392,53967],backgroundColor:colors,borderWidth:0}],{plugins:{...base.plugins,legend:{position:'bottom'},tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)} matrículas (${(c.raw/142673*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%)`}}},cutout:'64%'});
+chart('tempoChart','doughnut',['Tempo integral','Tempo parcial'],[{data:[25308,117365],backgroundColor:['#168b85','#dbe5ef'],borderWidth:0}],{cutout:'64%',plugins:{...base.plugins,tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)} (${(c.raw/142673*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%)`}}}});
+chart('comparativoChart','bar',['Matrículas (mil)','Estabelecimentos','Turmas (mil)'],[{label:'Rede estadual',data:[47.314,73,1.561],backgroundColor:'#2364aa'},{label:'Rede municipal',data:[41.392,120,2.227],backgroundColor:'#168b85'},{label:'Rede privada',data:[53.967,231,3.116],backgroundColor:'#f2b84b'}],{scales:{y:{beginAtZero:true,grid:{color:'#edf1f6'}}}});
+chart('etapasChart','bar',['Educação Infantil','Creche','Pré-escola','Ensino Fundamental regular','Ensino Médio regular','Educação Profissional','EJA','Educação Especial'],[{label:'Matrículas',data:[30781,15715,15066,77979,25624,11507,2034,5953],backgroundColor:'#2364aa',borderRadius:5}],{indexAxis:'y',plugins:{...base.plugins,legend:{display:false}}});
+chart('integralChart','bar',['Total municipal','Rede pública','Estadual','Municipal','Privada'],[{label:'Tempo integral',data:[25308,19012,11667,7345,6296],backgroundColor:'#168b85',borderRadius:5}],{plugins:{...base.plugins,legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#edf1f6'}}}});
+chart('percentChart','bar',['Total municipal','Rede pública','Estadual','Municipal','Privada'],[{label:'Tempo integral (%)',data:[17.7,21.4,24.7,17.7,11.7],backgroundColor:'#f2b84b',borderRadius:5}],{plugins:{...base.plugins,legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}%`}}},scales:{x:{max:30,beginAtZero:true,grid:{color:'#edf1f6'}}},indexAxis:'y'});
+chart('idadeChart','bar',['Até 3','4–5','6–10','11–14','15–17','18–19','20–24','25–29','30–34','35–39','40+'],[{label:'Matrículas',data:[14642,14713,43504,35037,27426,2499,1247,817,560,548,1680],backgroundColor:'#2364aa',borderRadius:4}],{indexAxis:'y',plugins:{...base.plugins,legend:{display:false}}});
+chart('racaChart','doughnut',['Não declarada','Branca','Preta','Parda','Amarela','Indígena'],[{data:[19868,89290,3676,29109,648,82],backgroundColor:colors,borderWidth:0}],{cutout:'52%'});
+chart('especialChart','doughnut',['Classes comuns','Classes exclusivas'],[{data:[5675,278],backgroundColor:['#168b85','#f2b84b'],borderWidth:0}],{cutout:'62%',plugins:{...base.plugins,tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)} (${(c.raw/5953*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%)`}}}});
+chart('tiposChart','bar',['TEA','Deficiência intelectual','Deficiência física','Deficiência múltipla','Deficiência auditiva','Altas habilidades/superdotação','Baixa visão','Deficiência visual/cegueira','Surdez','Surdocegueira'],[{label:'Matrículas registradas',data:[3387,2211,728,168,119,136,121,19,59,0],backgroundColor:'#8a70b5',borderRadius:4}],{indexAxis:'y',plugins:{...base.plugins,legend:{display:false}}});
+chart('estabChart','bar',['Educação Infantil','Creche','Pré-escola','Ensino Fundamental','Anos iniciais','Anos finais','Ensino Médio','Educação Profissional','EJA','Educação Especial'],[{label:'Estabelecimentos',data:[287,221,213,233,181,133,99,56,33,338],backgroundColor:'#2364aa',borderRadius:4}],{indexAxis:'y',plugins:{...base.plugins,legend:{display:false}}});
+chart('turmasChart','bar',['Educação Infantil','Creche','Pré-escola','Ensino Fundamental','Anos iniciais','Anos finais','Ensino Médio','Educação Profissional','EJA','Educação Especial','Classes comuns (EE)','Classes exclusivas (EE)'],[{label:'Turmas',data:[2313,1365,948,3240,1945,1295,873,577,147,3279,3244,35],backgroundColor:'#168b85',borderRadius:4}],{indexAxis:'y',plugins:{...base.plugins,legend:{display:false}}});
+</script>
+</body></html>
